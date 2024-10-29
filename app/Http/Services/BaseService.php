@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\BaseInterface;
 use App\Http\Traits\Response;
+use App\Models\User;
 
 class BaseService implements BaseInterface
 {
@@ -20,7 +21,11 @@ class BaseService implements BaseInterface
     }
     public function store(array $data, $model): object
     {
-        return $this->response->created( $model, $this->model->create($data));
+        if ($this->model instanceof User) {
+            return $this->response->registered($this->model->create($data));
+        } else {
+            return $this->response->created( $model, $this->model->create($data));
+        }
     }
     public function show($id, $model): \Illuminate\Http\JsonResponse
     {

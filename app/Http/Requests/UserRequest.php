@@ -34,4 +34,12 @@ class UserRequest extends FormRequest
             'password' => ['required', 'string', 'confirmed'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'role_id.required' => 'Role type is required.',
+            'role_id.exists' => 'Invalid role type.',
+        ];
+    }
 }

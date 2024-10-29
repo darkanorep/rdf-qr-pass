@@ -61,4 +61,11 @@ class Response
             'data' => $data
         ], 200);
     }
+
+    public function registered($data)
+    {
+        return response()->json([
+            'message' => 'Successfully registered.',
+        ], 200);
+    }
 }

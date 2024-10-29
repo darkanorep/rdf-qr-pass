@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AttendeeController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LimitController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,10 +23,19 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::post('signup', [\App\Http\Controllers\AuthController::class, 'signup']);
+//FOR AUTHENTICATION
+Route::post('signup', [AuthController::class, 'signup']);
+//FOR ATTENDEES
+Route::post('register', [AttendeeController::class, 'store']);
 
 Route::put('roles/change-status/{role}', [RoleController::class, 'changeStatus']);
 Route::resource('roles', RoleController::class);
 
 Route::put('groups/change-status/{group}', [GroupController::class, 'changeStatus']);
 Route::resource('groups', GroupController::class);
+
+Route::resource('attendees', AttendeeController::class);
+Route::put('attendees/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
+
+Route::resource('limits', LimitController::class);
+Route::put('limits/change-status/{limit}', [LimitController::class, 'changeStatus']);
