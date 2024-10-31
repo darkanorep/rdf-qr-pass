@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AttendeeRequest;
+use App\Http\Services\ActionService;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
 use App\Models\Attendee;
@@ -14,26 +15,24 @@ class AttendeeController extends Controller
         $this->baseService = new BaseService($attendee, $response);
         $this->attendee = $attendee;
     }
-
     public function index(Request $request)
     {
         return $this->baseService->index($request, 'Attendees');
     }
-
     public function store(AttendeeRequest $request)
     {
         return $this->baseService->store($request->validated(), 'Attendee');
     }
-
     public function show($attendee) {
         return $this->baseService->show($attendee, 'Attendee');
     }
-
     public function update(AttendeeRequest $request, $attendee) {
         return $this->baseService->update($request->validated(), $attendee, 'Attendee');
     }
-
     public function changeStatus($attendee) {
         return $this->baseService->changeStatus($attendee, 'Attendee');
+    }
+    public function readQR(ActionService $actionService, Request $request) {
+        return $actionService->readQR($request);
     }
 }

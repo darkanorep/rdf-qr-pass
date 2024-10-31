@@ -66,6 +66,7 @@ class Response
     {
         return response()->json([
             'message' => 'Successfully registered.',
+            'data' => $data
         ], 200);
     }
 }

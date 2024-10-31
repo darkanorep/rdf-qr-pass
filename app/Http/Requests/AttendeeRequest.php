@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\GroupLimit;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class AttendeeRequest extends FormRequest
@@ -29,22 +31,39 @@ class AttendeeRequest extends FormRequest
             'first_name' => ['required'],
             'last_name' => ['required'],
             'contact' => ['required'],
-            'company' => ['required'],
+            'company' => ['required_if:group_id,1'],
             'employee_id' => [
-                'required',
+                'required_if:group_id,1',
+                'nullable',
                 Rule::unique('attendees', 'employee_id')->ignore($this->attendee),
             ],
-            'position' => ['required'],
-            'department' => ['required'],
-            'unit' => ['required'],
+            'position' => ['required_if:group_id,1'],
+            'department' => ['required_if:group_id,1'],
+            'unit' => ['required_if:group_id,1'],
         ];
     }
 
     public function messages()
     {
         return [
+            'company.required_if' => 'Company is required.',
+            'employee_id.required_if' => 'Employee ID is required.',
+            'position.required_if' => 'Position is required.',
+            'department.required_if' => 'Department is required.',
+            'unit.required_if' => 'Unit is required.',
             'group_id.required' => 'Group type is required.',
             'group_id.exists' => 'Invalid group type.',
         ];
     }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        $errors = $validator->errors()->all();
+        $customError = 'We are sorry to inform you that we have reached the maximum capacity for the Year Starter Party.';
+
+        if (in_array($customError, $errors)) {
+            throw new HttpResponseException(response()->json(['message' => $customError], 422));
+        }
+    }
+
 }

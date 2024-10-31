@@ -4,7 +4,10 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\BaseInterface;
 use App\Http\Traits\Response;
+use App\Models\Attendee;
 use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class BaseService implements BaseInterface
 {
@@ -23,6 +26,9 @@ class BaseService implements BaseInterface
     {
         if ($this->model instanceof User) {
             return $this->response->registered($this->model->create($data));
+        } elseif ($this->model instanceof Attendee) {
+            $attendee = $this->model->create($data);
+            return $this->response->registered(['attendee' => $attendee, 'qr_code' => Crypt::encrypt($attendee->id)]);
         } else {
             return $this->response->created( $model, $this->model->create($data));
         }

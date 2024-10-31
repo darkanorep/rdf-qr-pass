@@ -39,3 +39,5 @@ Route::put('attendees/change-status/{attendee}', [AttendeeController::class, 'ch
 
 Route::resource('limits', LimitController::class);
 Route::put('limits/change-status/{limit}', [LimitController::class, 'changeStatus']);
+
+Route::get('read-qr', [AttendeeController::class, 'readQR']);
