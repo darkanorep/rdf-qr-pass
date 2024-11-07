@@ -40,6 +40,12 @@ class AttendeeRequest extends FormRequest
             'position' => ['required_if:group_id,1'],
             'department' => ['required_if:group_id,1'],
             'unit' => ['required_if:group_id,1'],
+            'is_attending' => ['nullable', 'boolean'],
+            'is_additional' => ['nullable', 'boolean'],
+            'rsvp' => ['required_if:is_additional,true'],
+            'rsvp.first_name' => ['required_if:is_additional,true'],
+            'rsvp.last_name' => ['required_if:is_additional,true'],
+            'rsvp.company' => ['required_if:is_additional,true'],
         ];
     }
 
@@ -53,6 +59,9 @@ class AttendeeRequest extends FormRequest
             'unit.required_if' => 'Unit is required.',
             'group_id.required' => 'Group type is required.',
             'group_id.exists' => 'Invalid group type.',
+            'rsvp.first_name.required_if' => 'First name is required.',
+            'rsvp.last_name.required_if' => 'Last name is required.',
+            'rsvp.company.required_if' => 'Company is required.',
         ];
     }
 

@@ -3,9 +3,12 @@
 namespace App\Http\Services;
 
 use App\Http\Interfaces\BaseInterface;
+use App\Http\Resources\AttendeeResource;
 use App\Http\Traits\Response;
 use App\Models\Attendee;
+use App\Models\AttendeeAnswers;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,15 +25,32 @@ class BaseService implements BaseInterface
 
         return $this->response->fetch($model, $this->model->paginate($rows));
     }
+//    public function store(array $data, $model): object
+//    {
+//        if ($this->model instanceof User) {
+//            return $this->response->registered($this->model->create($data));
+//        } elseif ($this->model instanceof Attendee) {
+//            $attendee = $this->model->create($data);
+//            (new ActionService($attendee))->isAttending($data);
+//            return $this->response->registered(new AttendeeResource($attendee));
+//        } else {
+//            return $this->response->created( $model, $this->model->create($data));
+//        }
+//    }
     public function store(array $data, $model): object
     {
-        if ($this->model instanceof User) {
-            return $this->response->registered($this->model->create($data));
-        } elseif ($this->model instanceof Attendee) {
-            $attendee = $this->model->create($data);
-            return $this->response->registered(['attendee' => $attendee, 'qr_code' => Crypt::encrypt($attendee->id)]);
-        } else {
-            return $this->response->created( $model, $this->model->create($data));
+        $createdModel = $this->model->create($data);
+
+        switch (true) {
+            case $this->model instanceof User:
+                return $this->response->registered($createdModel);
+
+            case $this->model instanceof Attendee:
+                (new ActionService($createdModel))->isAttending($data);
+                return $this->response->registered(new AttendeeResource($createdModel));
+
+            default:
+                return $this->response->created($model, $createdModel);
         }
     }
     public function show($id, $model): \Illuminate\Http\JsonResponse
