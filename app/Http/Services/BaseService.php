@@ -25,18 +25,7 @@ class BaseService implements BaseInterface
 
         return $this->response->fetch($model, $this->model->paginate($rows));
     }
-//    public function store(array $data, $model): object
-//    {
-//        if ($this->model instanceof User) {
-//            return $this->response->registered($this->model->create($data));
-//        } elseif ($this->model instanceof Attendee) {
-//            $attendee = $this->model->create($data);
-//            (new ActionService($attendee))->isAttending($data);
-//            return $this->response->registered(new AttendeeResource($attendee));
-//        } else {
-//            return $this->response->created( $model, $this->model->create($data));
-//        }
-//    }
+
     public function store(array $data, $model): object
     {
         $createdModel = $this->model->create($data);
@@ -60,6 +49,11 @@ class BaseService implements BaseInterface
     public function update(array $data, $id, $model): \Illuminate\Http\JsonResponse
     {
         $context = $this->model->find($id);
+
+        if (!$context) {
+            return $this->response->notFound($model);
+        }
+
         $context->update($data);
 
         return $this->response->updated($model, $context);
@@ -74,6 +68,8 @@ class BaseService implements BaseInterface
             } else {
                 return $this->response->archived($model, $context->delete());
             }
+        } else {
+            return $this->response->notFound($model);
         }
     }
 }

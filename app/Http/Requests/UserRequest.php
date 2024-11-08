@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -30,7 +31,10 @@ class UserRequest extends FormRequest
             'department' => ['required', 'string'],
             'unit' => ['required', 'string'],
             'position' => ['required', 'string'],
-            'username' => ['required', 'string', 'unique:users,username'],
+            'username' => ['required',
+                'string',
+                Rule::unique('users', 'username')->ignore($this->user),
+            ],
             'password' => ['required', 'string', 'confirmed'],
         ];
     }

@@ -69,4 +69,11 @@ class Response
             'data' => $data
         ], 200);
     }
+
+    public function notFound($model)
+    {
+        return response()->json([
+            'message' => $model .' not found'
+        ], 404);
+    }
 }
