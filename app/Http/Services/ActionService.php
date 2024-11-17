@@ -13,7 +13,7 @@ class ActionService
 {
     private Attendee $attendee;
 
-    public function __construct($attendee) {
+    public function __construct(Attendee $attendee) {
         $this->attendee = $attendee;
     }
 
@@ -39,5 +39,21 @@ class ActionService
                 ]);
             }
         }
+    }
+
+    public function preRegisterChecker($request)
+    {
+        $employeeID = $request->input('employee_id');
+
+        return $this->attendee->where('employee_id', $employeeID)
+            ->with([
+                'group' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'building' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->first();
     }
 }

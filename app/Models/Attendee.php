@@ -17,16 +17,20 @@ class Attendee extends Model
         'group_id',
         'first_name',
         'last_name',
+        'suffix',
         'contact',
         'company',
         'employee_id',
         'position',
         'department',
         'unit',
+        'category',
+        'building_id'
     ];
 
     protected $hidden = [
         'group_id',
+        'building_id',
         'created_at'
     ];
 
@@ -40,12 +44,17 @@ class Attendee extends Model
         return $this->hasMany(AttendeeAnswers::class);
     }
 
-    public function responses(): HasMany
+    public function building(): BelongsTo
     {
-        return $this->hasMany(AttendeeResponses::class);
+        return $this->belongsTo(Building::class, 'building_id');
     }
 
-    public function supplier_guests(): HasManyThrough {
-        return $this->hasManyThrough(SupplierGuest::class, AttendeeResponses::class, 'attendee_id', 'attendee_response_id', 'id', 'id');
-    }
+//    public function responses(): HasMany
+//    {
+//        return $this->hasMany(AttendeeResponses::class);
+//    }
+//
+//    public function supplier_guests(): HasManyThrough {
+//        return $this->hasManyThrough(SupplierGuest::class, AttendeeResponses::class, 'attendee_id', 'attendee_response_id', 'id', 'id');
+//    }
 }

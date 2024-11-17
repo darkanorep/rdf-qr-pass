@@ -2,10 +2,12 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Http\JsonResponse;
+
 class Response
 {
 
-    public function ok($message = 'Success', $data = [])
+    public function ok($message = 'Success', $data = []) : JsonResponse
     {
         return response()->json([
             'status' => 'success',
@@ -14,7 +16,7 @@ class Response
         ], 200);
     }
 
-    public function created($model, $data)
+    public function created($model, $data): JsonResponse
     {
         return response()->json([
             'message' => $model .' successfully created',
@@ -22,7 +24,7 @@ class Response
         ], 201);
     }
 
-    public function updated($model, $data)
+    public function updated($model, $data) : JsonResponse
     {
         return response()->json([
             'message' => $model .' successfully updated',
@@ -30,7 +32,7 @@ class Response
         ], 200);
     }
 
-    public function error($message = 'Error', $code = 400)
+    public function error($message = 'Error', $code = 400) : JsonResponse
     {
         return response()->json([
             'status' => 'error',
@@ -38,7 +40,7 @@ class Response
         ], $code);
     }
 
-    public function fetch($model, $data)
+    public function fetch($model, $data) : JsonResponse
     {
         return response()->json([
             'message' => $model .' successfully fetched',
@@ -46,7 +48,7 @@ class Response
         ], 200);
     }
 
-    public function archived($model, $data)
+    public function archived($model, $data) : JsonResponse
     {
         return response()->json([
             'message' => $model .' successfully archived',
@@ -54,7 +56,7 @@ class Response
         ], 200);
     }
 
-    public function restored($model, $data)
+    public function restored($model, $data) : JsonResponse
     {
         return response()->json([
             'message' => $model .' successfully restored',
@@ -62,7 +64,7 @@ class Response
         ], 200);
     }
 
-    public function registered($data)
+    public function registered($data) : JsonResponse
     {
         return response()->json([
             'message' => 'Successfully registered.',
@@ -70,7 +72,7 @@ class Response
         ], 200);
     }
 
-    public function notFound($model)
+    public function notFound($model) : JsonResponse
     {
         return response()->json([
             'message' => $model .' not found'

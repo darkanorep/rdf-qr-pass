@@ -19,11 +19,10 @@ class BaseService implements BaseInterface
         $this->model = $model;
         $this->response = $response;
     }
-    public function index($request, $model): \Illuminate\Http\JsonResponse
+    public function index($request, $model, $relations = []): \Illuminate\Http\JsonResponse
     {
-        $rows = $request->input('rows', 10);
-
-        return $this->response->fetch($model, $this->model->paginate($rows));
+        $query = $this->model->with($relations);
+        return $this->response->fetch($model, $query->dynamicPaginate());
     }
 
     public function store(array $data, $model): object
@@ -42,9 +41,13 @@ class BaseService implements BaseInterface
                 return $this->response->created($model, $createdModel);
         }
     }
-    public function show($id, $model): \Illuminate\Http\JsonResponse
+    public function show($id, $model, $resource = null): \Illuminate\Http\JsonResponse
     {
-        return $this->response->fetch($model, $this->model->find($id));
+        $modelInstance = $this->model->findOrFail($id);
+        if ($resource) {
+            return $this->response->fetch($model, new $resource($modelInstance));
+        }
+        return $this->response->fetch($model, $modelInstance);
     }
     public function update(array $data, $id, $model): \Illuminate\Http\JsonResponse
     {
