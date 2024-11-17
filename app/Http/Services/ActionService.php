@@ -45,15 +45,25 @@ class ActionService
     {
         $employeeID = $request->input('employee_id');
 
-        return $this->attendee->where('employee_id', $employeeID)
+        $attendee = $this->attendee->where('employee_id', $employeeID)
             ->with([
-                'group' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'building' => function ($query) {
-                    $query->select('id', 'name');
-                }
+                'group:id,name',
+                'building:id,name'
             ])
+            ->select(
+                'id'
+            )
             ->first();
+
+        return $attendee ?: response()->json([], 404);
+    }
+
+    public function findQR($request) {
+        $employeeID = $request->input('employee_id');
+
+        $attendee = $this->attendee->where('employee_id', $employeeID)
+            ->first();
+
+        return $attendee ?: response()->json([], 404);
     }
 }
