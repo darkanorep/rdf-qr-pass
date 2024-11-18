@@ -13,7 +13,7 @@ class ActionService
 {
     private Attendee $attendee;
 
-    public function __construct($attendee) {
+    public function __construct(Attendee $attendee) {
         $this->attendee = $attendee;
     }
 
@@ -39,5 +39,31 @@ class ActionService
                 ]);
             }
         }
+    }
+
+    public function preRegisterChecker($request)
+    {
+        $employeeID = $request->input('employee_id');
+
+        $attendee = $this->attendee->where('employee_id', $employeeID)
+            ->with([
+                'group:id,name',
+                'building:id,name'
+            ])
+            ->select(
+                'id'
+            )
+            ->first();
+
+        return $attendee ?: response()->json([], 404);
+    }
+
+    public function findQR($request) {
+        $employeeID = $request->input('employee_id');
+
+        $attendee = $this->attendee->where('employee_id', $employeeID)
+            ->first();
+
+        return $attendee ?: response()->json([], 404);
     }
 }

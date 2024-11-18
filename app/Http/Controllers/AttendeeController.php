@@ -16,6 +16,7 @@ class AttendeeController extends Controller
     public function __construct(Attendee $attendee, Response $response) {
         $this->baseService = new BaseService($attendee, $response);
         $this->attendee = $attendee;
+        $this->actionService = new ActionService($attendee);
     }
     public function index(Request $request) : JsonResponse
     {
@@ -38,7 +39,20 @@ class AttendeeController extends Controller
     public function changeStatus($attendee) : JsonResponse {
         return $this->baseService->changeStatus($attendee, 'Attendee');
     }
+<<<<<<< HEAD
     public function readQR(ActionService $actionService, Request $request) : JsonResponse {
         return $actionService->readQR($request);
+=======
+    public function readQR(Request $request) : JsonResponse {
+        return $this->actionService->readQR($request);
+    }
+
+    public function preRegisterChecker(Request $request) {
+        return $this->actionService->preRegisterChecker($request);
+    }
+
+    public function findQR(Request $request) {
+        return $this->actionService->findQR($request);
+>>>>>>> eb0fff2802ba39e5279f5d2703f1b2e447ad9d50
     }
 }

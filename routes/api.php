@@ -34,6 +34,11 @@ Route::post('register', [AttendeeController::class, 'store']);
 Route::get('read-qr', [AttendeeController::class, 'readQR']);
 Route::get('dropdown-groups', [GroupController::class, 'index']);
 Route::get('dropdown-buildings', [BuildingController::class, 'index']);
+<<<<<<< HEAD
+=======
+Route::get('pre-register-checker', [AttendeeController::class, 'preRegisterChecker']);
+Route::get('find-qr', [AttendeeController::class, 'findQR']);
+>>>>>>> eb0fff2802ba39e5279f5d2703f1b2e447ad9d50
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
