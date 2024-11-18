@@ -4,9 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Crypt;
 
-class AttendeeResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,17 +16,17 @@ class AttendeeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'contact' => $this->contact,
             'company' => $this->company,
             'employee_id' => $this->employee_id,
-            'position' => $this->position,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'department' => $this->department,
             'unit' => $this->unit,
-            'group' => $this->group->name ?? null,
-            'building' => $this->building->name ?? null,
-            'qr_code' => Crypt::encrypt($this->id)
+            'position' => $this->position,
+            'username' => $this->username,
+            'role' => $this->role,
+            'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at,
         ];
     }
 }

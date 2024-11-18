@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
 use App\Models\User;
@@ -16,7 +17,10 @@ class UserController extends Controller
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse{
-        return $this->baseService->index($request, 'Users');
+        $relation = [
+            'role' => fn($query) => $query->select('id', 'name')
+        ];
+        return $this->baseService->index($request, 'Users', $relation);
     }
 
     public function store(UserRequest $request):object {
@@ -24,11 +28,11 @@ class UserController extends Controller
     }
 
     public function show($user): \Illuminate\Http\JsonResponse{
-        return $this->baseService->show($user, 'User');
+        return $this->baseService->show($user, 'User', UserResource::class);
     }
 
     public function update(UserRequest $request, $user): \Illuminate\Http\JsonResponse{
-        return $this->baseService->update($request->validated(), $user, 'User');
+        return $this->baseService->update($request->validated(), $user, 'User', UserResource::class);
     }
 
     public function changeStatus($user): ?\Illuminate\Http\JsonResponse{

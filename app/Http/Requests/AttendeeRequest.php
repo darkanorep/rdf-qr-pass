@@ -30,6 +30,7 @@ class AttendeeRequest extends FormRequest
             'group_id' => ['required', 'exists:groups,id', new GroupLimit($this->group_id)],
             'first_name' => ['required'],
             'last_name' => ['required'],
+            'suffix' => ['nullable'],
             'contact' => ['required'],
             'company' => ['required_if:group_id,1'],
             'employee_id' => [
@@ -40,12 +41,14 @@ class AttendeeRequest extends FormRequest
             'position' => ['required_if:group_id,1'],
             'department' => ['required_if:group_id,1'],
             'unit' => ['required_if:group_id,1'],
+            'category' => ['nullable'],
+            'building_id' => ['nullable'],
             'is_attending' => ['nullable', 'boolean'],
-            'is_additional' => ['nullable', 'boolean'],
-            'rsvp' => ['required_if:is_additional,true'],
-            'rsvp.first_name' => ['required_if:is_additional,true'],
-            'rsvp.last_name' => ['required_if:is_additional,true'],
-            'rsvp.company' => ['required_if:is_additional,true'],
+//            'is_additional' => ['nullable', 'boolean'],
+//            'rsvp' => ['required_if:is_additional,true'],
+//            'rsvp.first_name' => ['required_if:is_additional,true'],
+//            'rsvp.last_name' => ['required_if:is_additional,true'],
+//            'rsvp.company' => ['required_if:is_additional,true'],
         ];
     }
 

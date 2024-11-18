@@ -6,6 +6,8 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LimitController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\ColorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,8 @@ Route::post('login', [AuthController::class, 'login']);
 //FOR ATTENDEES
 Route::post('register', [AttendeeController::class, 'store']);
 Route::get('read-qr', [AttendeeController::class, 'readQR']);
+Route::get('dropdown-groups', [GroupController::class, 'index']);
+Route::get('dropdown-buildings', [BuildingController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
@@ -45,10 +49,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::put('groups/change-status/{group}', [GroupController::class, 'changeStatus']);
         Route::resource('groups', GroupController::class);
 
-        Route::resource('attendees', AttendeeController::class);
         Route::put('attendees/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
+        Route::resource('attendees', AttendeeController::class);
 
-        Route::resource('limits', LimitController::class);
         Route::put('limits/change-status/{limit}', [LimitController::class, 'changeStatus']);
+        Route::resource('limits', LimitController::class);
+
+        Route::put('buildings/change-status/{building}', [BuildingController::class, 'changeStatus']);
+        Route::resource('buildings', BuildingController::class);
+
+        Route::put('colors/change-status/{color}', [ColorController::class, 'changeStatus']);
+        Route::resource('colors', ColorController::class);
     });
 });
