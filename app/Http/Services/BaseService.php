@@ -21,7 +21,9 @@ class BaseService implements BaseInterface
     }
     public function index($request, $model, $relations = []): \Illuminate\Http\JsonResponse
     {
-        $query = $this->model->with($relations);
+        $query = $this->model
+//            ->useFilters()
+            ->with($relations);
         return $this->response->fetch($model, $query->dynamicPaginate());
     }
     public function store(array $data, $model): object

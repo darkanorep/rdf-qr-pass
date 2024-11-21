@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\AttendeeFilters;
+use Essa\APIToolKit\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -12,7 +14,10 @@ use Illuminate\Database\Query\Builder;
 
 class Attendee extends Model
 {
-    use HasFactory, softDeletes;
+    use HasFactory, softDeletes, Filterable;
+
+
+    protected string $default_filters = AttendeeFilters::class;
 
     protected $fillable = [
         'group_id',

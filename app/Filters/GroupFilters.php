@@ -10,5 +10,13 @@ class GroupFilters extends QueryFilters
 
     protected array $columnSearch = ['name'];
 
+    public function status($status)
+    {
+        return $this->builder->when($status == 1, function ($query) {
+            return $query->whereNull('deleted_at');
+        }, function ($query) {
+            return $query->whereNotNull('deleted_at');
+        });
+    }
 
 }

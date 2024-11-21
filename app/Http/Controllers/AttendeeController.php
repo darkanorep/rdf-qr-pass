@@ -59,7 +59,6 @@ class AttendeeController extends Controller
     }
     public function attendeesList(): Collection
     {
-        return $this->attendee->attendeesAttendance()
-            ->get();
+        return $this->attendee->attendeesAttendance()->get();
     }
 }
