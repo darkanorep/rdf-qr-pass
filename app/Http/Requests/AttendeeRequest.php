@@ -44,6 +44,7 @@ class AttendeeRequest extends FormRequest
             'category' => ['nullable'],
             'building_id' => ['nullable'],
             'is_attending' => ['nullable', 'boolean'],
+            'qr_code' => ['nullable'],
 //            'is_additional' => ['nullable', 'boolean'],
 //            'rsvp' => ['required_if:is_additional,true'],
 //            'rsvp.first_name' => ['required_if:is_additional,true'],

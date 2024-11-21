@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \Illuminate\Database\Eloquent\Relations\HasMany;
 use \Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
 
 class Attendee extends Model
 {
@@ -25,7 +26,8 @@ class Attendee extends Model
         'department',
         'unit',
         'category',
-        'building_id'
+        'building_id',
+        'qr_code'
     ];
 
     protected $hidden = [
@@ -47,6 +49,11 @@ class Attendee extends Model
     public function building(): BelongsTo
     {
         return $this->belongsTo(Building::class, 'building_id');
+    }
+
+    public function attendance(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
     }
 
 //    public function responses(): HasMany

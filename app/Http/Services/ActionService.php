@@ -8,15 +8,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ActionService
 {
     private Attendee $attendee;
-
     public function __construct(Attendee $attendee) {
         $this->attendee = $attendee;
     }
-
     public function isAttending(array $data): void {
 
         $this->attendee->answers()->create([
@@ -40,7 +39,6 @@ class ActionService
             }
         }
     }
-
     public function preRegisterChecker($request)
     {
         $employeeID = $request->input('employee_id');
@@ -51,19 +49,56 @@ class ActionService
                 'building:id,name'
             ])
             ->select(
-                'id'
+                'id',
+                'employee_id',
+                'first_name',
+                'last_name',
+                'suffix',
+                'contact',
+                'company',
+                'position',
+                'department',
+                'unit',
+                'category',
+                'group_id',
+                'building_id',
+                'category'
             )
             ->first();
 
         return $attendee ?: response()->json([], 404);
     }
-
     public function findQR($request) {
         $employeeID = $request->input('employee_id');
 
         $attendee = $this->attendee->where('employee_id', $employeeID)
-            ->first();
+            ->first()->qr_code;
 
         return $attendee ?: response()->json([], 404);
+    }
+    public function attendance($request) : \Illuminate\Http\JsonResponse  {
+        $attendee = $this->attendee->where('qr_code', $request->input('qr_code'))
+            ->with('attendance')
+            ->first();
+
+        if (!$attendee) {
+            return response()->json([
+                'message' => 'Attendee not found.'
+            ], 404);
+        }
+
+        if ($attendee->attendance()->exists()) {
+            return response()->json([
+                'message' => 'Already at the venue.'
+            ], 400);
+        }
+
+        $attendee->attendance()->create([
+            'is_present' => true
+        ]);
+
+        return response()->json([
+            'message' => 'Please proceed to the venue.'
+        ], 200);
     }
 }

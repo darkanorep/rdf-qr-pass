@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,21 +31,28 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 
 //FOR ATTENDEES
+Route::put('register/{attendee}', [AttendeeController::class, 'update']);
 Route::post('register', [AttendeeController::class, 'store']);
 Route::get('read-qr', [AttendeeController::class, 'readQR']);
 Route::get('dropdown-groups', [GroupController::class, 'index']);
 Route::get('dropdown-buildings', [BuildingController::class, 'index']);
-<<<<<<< HEAD
-=======
 Route::get('pre-register-checker', [AttendeeController::class, 'preRegisterChecker']);
 Route::get('find-qr', [AttendeeController::class, 'findQR']);
->>>>>>> eb0fff2802ba39e5279f5d2703f1b2e447ad9d50
+Route::post('scan-qr', [AttendeeController::class, 'attendance']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::group(['middleware' => 'admin'], function () {
+        Route::prefix('attendees')->group(function () {
+            Route::get('/attendance-list', [AttendeeController::class, 'attendeesList']);
+            Route::put('/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
+            Route::post('/import', [AttendeeController::class, 'import']);
+        });
+
+        Route::resource('attendees', AttendeeController::class);
+
         Route::put('users/change-status/{user}', [UserController::class, 'changeStatus']);
         Route::resource('users', UserController::class);
 
@@ -53,9 +61,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::put('groups/change-status/{group}', [GroupController::class, 'changeStatus']);
         Route::resource('groups', GroupController::class);
-
-        Route::put('attendees/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
-        Route::resource('attendees', AttendeeController::class);
 
         Route::put('limits/change-status/{limit}', [LimitController::class, 'changeStatus']);
         Route::resource('limits', LimitController::class);

@@ -7,9 +7,13 @@ use App\Http\Resources\AttendeeResource;
 use App\Http\Services\ActionService;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
+use App\Imports\AttendeesImport;
+use App\Models\Attendance;
 use App\Models\Attendee;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendeeController extends Controller
 {
@@ -34,25 +38,38 @@ class AttendeeController extends Controller
         return $this->baseService->show($attendee, 'Attendee', AttendeeResource::class);
     }
     public function update(AttendeeRequest $request, $attendee) : JsonResponse {
-        return $this->baseService->update($request->validated(), $attendee, 'Attendee');
+        return $this->baseService->update($request->validated(), $attendee, 'Attendee', AttendeeResource::class);
     }
     public function changeStatus($attendee) : JsonResponse {
         return $this->baseService->changeStatus($attendee, 'Attendee');
     }
-<<<<<<< HEAD
-    public function readQR(ActionService $actionService, Request $request) : JsonResponse {
-        return $actionService->readQR($request);
-=======
     public function readQR(Request $request) : JsonResponse {
         return $this->actionService->readQR($request);
     }
-
     public function preRegisterChecker(Request $request) {
         return $this->actionService->preRegisterChecker($request);
     }
-
     public function findQR(Request $request) {
         return $this->actionService->findQR($request);
->>>>>>> eb0fff2802ba39e5279f5d2703f1b2e447ad9d50
+    }
+    public function import(Request $request) : string {
+        $file = $request->file('file');
+        Excel::import(new AttendeesImport, $file);
+
+        return 'success';
+    }
+    public function attendance(Request $request) : JsonResponse{
+        return $this->actionService->attendance($request);
+    }
+    public function attendeesList(): Collection{
+        return $this->attendee->has('attendance')
+            ->select([
+                'id',
+                'employee_id',
+                'first_name',
+                'last_name',
+                'suffix',
+            ])
+            ->get();
     }
 }

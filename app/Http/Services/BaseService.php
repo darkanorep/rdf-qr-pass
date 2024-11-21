@@ -24,7 +24,6 @@ class BaseService implements BaseInterface
         $query = $this->model->with($relations);
         return $this->response->fetch($model, $query->dynamicPaginate());
     }
-
     public function store(array $data, $model): object
     {
         $createdModel = $this->model->create($data);
@@ -49,7 +48,7 @@ class BaseService implements BaseInterface
         }
         return $this->response->fetch($model, $modelInstance);
     }
-    public function update(array $data, $id, $model): \Illuminate\Http\JsonResponse
+    public function update(array $data, $id, $model, $resource = null): \Illuminate\Http\JsonResponse
     {
         $context = $this->model->find($id);
 
@@ -57,11 +56,20 @@ class BaseService implements BaseInterface
             return $this->response->notFound($model);
         }
 
+        if ($this->model instanceof Attendee) {
+            if ($context->qr_code == null) {
+                $data['qr_code'] = strtoupper(self::quickRandom(7, Attendee::class, 'qr_code'));
+            }
+        }
+
         $context->update($data);
 
+        if ($resource) {
+            return $this->response->updated($model, new $resource($context));
+        }
         return $this->response->updated($model, $context);
     }
-    public function changeStatus($id, $model)
+    public function changeStatus($id, $model) : \Illuminate\Http\JsonResponse
     {
         $context = $this->model->withTrashed()->find($id);
 
@@ -74,5 +82,15 @@ class BaseService implements BaseInterface
         } else {
             return $this->response->notFound($model);
         }
+    }
+    public static function quickRandom($length, $model, $field): string
+    {
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        do {
+            $random = substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+        } while ($model::where($field, $random)->exists());
+
+        return $random;
     }
 }
