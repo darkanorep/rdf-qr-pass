@@ -42,9 +42,6 @@ class AttendeeController extends Controller
     public function changeStatus($attendee) : JsonResponse {
         return $this->baseService->changeStatus($attendee, 'Attendee');
     }
-    public function readQR(Request $request) : JsonResponse {
-        return $this->actionService->readQR($request);
-    }
     public function preRegisterChecker(Request $request) {
         return $this->actionService->preRegisterChecker($request);
     }

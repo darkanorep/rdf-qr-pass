@@ -33,7 +33,6 @@ Route::post('login', [AuthController::class, 'login']);
 //FOR ATTENDEES
 Route::put('register/{attendee}', [AttendeeController::class, 'update']);
 Route::post('register', [AttendeeController::class, 'store']);
-Route::get('read-qr', [AttendeeController::class, 'readQR']);
 Route::get('dropdown-groups', [GroupController::class, 'index']);
 Route::get('dropdown-buildings', [BuildingController::class, 'index']);
 Route::get('pre-register-checker', [AttendeeController::class, 'preRegisterChecker']);
