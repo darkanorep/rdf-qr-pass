@@ -56,6 +56,10 @@ class Attendee extends Model
         return $this->hasMany(Attendance::class);
     }
 
+    public function attendeesAttendance() {
+        return $this->has('attendance')->select('id', 'employee_id', 'first_name', 'last_name', 'suffix');
+    }
+
 //    public function responses(): HasMany
 //    {
 //        return $this->hasMany(AttendeeResponses::class);

@@ -8,7 +8,6 @@ use App\Http\Services\ActionService;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
 use App\Imports\AttendeesImport;
-use App\Models\Attendance;
 use App\Models\Attendee;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -61,15 +60,9 @@ class AttendeeController extends Controller
     public function attendance(Request $request) : JsonResponse{
         return $this->actionService->attendance($request);
     }
-    public function attendeesList(): Collection{
-        return $this->attendee->has('attendance')
-            ->select([
-                'id',
-                'employee_id',
-                'first_name',
-                'last_name',
-                'suffix',
-            ])
+    public function attendeesList(): Collection
+    {
+        return $this->attendee->attendeesAttendance()
             ->get();
     }
 }
