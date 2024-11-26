@@ -4,7 +4,7 @@ namespace App\Filters;
 
 use Essa\APIToolKit\Filters\QueryFilters;
 
-class GroupFilters extends BaseFilters
+class ColorFilters extends BaseFilters
 {
     protected array $allowedFilters = ['name'];
 

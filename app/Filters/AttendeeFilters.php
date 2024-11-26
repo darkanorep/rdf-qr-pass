@@ -4,7 +4,7 @@ namespace App\Filters;
 
 use Essa\APIToolKit\Filters\QueryFilters;
 
-class AttendeeFilters extends QueryFilters
+class AttendeeFilters extends BaseFilters
 {
     protected array $allowedFilters = ['first_name', 'last_name', 'employee_id'];
 

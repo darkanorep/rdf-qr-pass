@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Enums\GroupType;
+use App\Events\AttendeeEvent;
 use App\Models\Attendee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
@@ -62,11 +63,19 @@ class ActionService
                 'category',
                 'group_id',
                 'building_id',
-                'category'
+                'category',
+                'qr_code'
             )
             ->first();
 
-        return $attendee ?: response()->json([], 404);
+        return $attendee
+            ? !$attendee->qr_code
+                ? $attendee
+                : response()->json([
+                    'message' => 'Already registered.',
+                    'qr_code' => $attendee->qr_code
+                ])
+            : response()->json([], 404);
     }
     public function findQR($request) {
         $employeeID = $request->input('employee_id');
@@ -96,6 +105,8 @@ class ActionService
         $attendee->attendance()->create([
             'is_present' => true
         ]);
+
+        event(new AttendeeEvent($attendee));
 
         return response()->json([
             'message' => 'Please proceed to the venue.'
