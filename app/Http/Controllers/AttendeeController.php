@@ -16,10 +16,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AttendeeController extends Controller
 {
+    private BaseService $baseService;
+    private Attendee $attendee;
+    private ActionService $actionService;
+    private Response $response;
+
     public function __construct(Attendee $attendee, Response $response) {
         $this->baseService = new BaseService($attendee, $response);
         $this->attendee = $attendee;
         $this->actionService = new ActionService($attendee);
+        $this->response = $response;
     }
     public function index(Request $request) : JsonResponse
     {
@@ -48,11 +54,11 @@ class AttendeeController extends Controller
     public function findQR(Request $request) {
         return $this->actionService->findQR($request);
     }
-    public function import(Request $request) : string {
+    public function import(Request $request) : JsonResponse {
         $file = $request->file('file');
         Excel::import(new AttendeesImport, $file);
 
-        return 'success';
+        return $this->response->ok('Attendees imported successfully');
     }
     public function attendance(Request $request) : JsonResponse{
         return $this->actionService->attendance($request);
