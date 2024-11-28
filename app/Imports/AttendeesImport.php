@@ -69,6 +69,8 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
                     'unit' => $row['unit'],
                     'category' => $row['category'],
                     'building_id' => $this->building->where('name', $row['building'])->first()->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             })->toArray());
         });

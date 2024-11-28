@@ -8,9 +8,6 @@ use App\Http\Traits\Response;
 use App\Models\Attendee;
 use App\Models\AttendeeAnswers;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
 
 class BaseService implements BaseInterface
 {

@@ -10,8 +10,14 @@ class BaseFilters extends QueryFilters
 
     protected array $columnSearch = [];
 
-    public function status($status): \Illuminate\Database\Eloquent\Builder
+    public function status($status)
     {
-        return $status ? $this->builder->whereNull('deleted_at') : $this->builder->whereNotNull('deleted_at');
+        return $this->builder->withTrashed()->when(!$status, function ($query) {
+            $query->whereNotNull('deleted_at');
+        }, function ($query) use ($status) {
+            $query->when($status, function ($query){
+                $query->whereNull('deleted_at');
+            });
+        });
     }
 }
