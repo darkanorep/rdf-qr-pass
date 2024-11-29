@@ -21,7 +21,7 @@ class BuildingController extends Controller
     public function index(Request $request): JsonResponse
     {
         $relations = [
-            'color' => fn($query) => $query->select('id', 'name')
+            'color' => fn($query) => $query->select('id', 'name', 'hex')
         ];
 
         return $this->baseService->index($request, 'Building', $relations);

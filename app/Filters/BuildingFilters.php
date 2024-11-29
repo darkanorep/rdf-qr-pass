@@ -9,4 +9,8 @@ class BuildingFilters extends BaseFilters
     protected array $allowedFilters = ['name'];
 
     protected array $columnSearch = ['name'];
+
+    protected array $relationSearch = [
+        'color' => ['name'],
+    ];
 }

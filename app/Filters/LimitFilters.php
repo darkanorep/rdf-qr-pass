@@ -9,4 +9,8 @@ class LimitFilters extends BaseFilters
     protected array $allowedFilters = ['limit', 'year'];
 
     protected array $columnSearch = ['limit', 'year'];
+
+    protected array $relationSearch = [
+        'group' => ['name']
+    ];
 }

@@ -17,7 +17,10 @@ class LimitController extends Controller
 
     public function index(Request $request)
     {
-        return $this->baseService->index($request, 'Limits');
+        $relation = [
+            'group'
+        ];
+        return $this->baseService->index($request, 'Limits', $relation);
     }
 
     public function store(LimitRequest $request)

@@ -23,4 +23,8 @@ class Limit extends Model
     protected $hidden = [
         'created_at'
     ];
+
+    public function group(){
+        return $this->hasMany(Group::class, 'id', 'group_id');
+    }
 }

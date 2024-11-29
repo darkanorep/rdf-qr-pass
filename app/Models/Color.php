@@ -15,7 +15,8 @@ class Color extends Model
     protected string $default_filters = ColorFilters::class;
 
     protected $fillable = [
-        'name'
+        'name',
+        'hex'
     ];
 
     protected $hidden = [

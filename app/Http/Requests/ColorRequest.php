@@ -22,7 +22,8 @@ class ColorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:colors,name,' . $this->route('color')
+            'name' => 'required|unique:colors,name,' . $this->route('color'),
+            'hex' => 'required|unique:colors,hex,' . $this->route('color')
         ];
     }
 

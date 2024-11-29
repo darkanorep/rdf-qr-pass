@@ -6,7 +6,7 @@ use Essa\APIToolKit\Filters\QueryFilters;
 
 class ColorFilters extends BaseFilters
 {
-    protected array $allowedFilters = ['name'];
+    protected array $allowedFilters = ['name', 'hex'];
 
-    protected array $columnSearch = ['name'];
+    protected array $columnSearch = ['name', 'hex'];
 }
