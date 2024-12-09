@@ -6,6 +6,7 @@ use App\Enums\GroupType;
 use App\Events\AttendeeEvent;
 use App\Models\Attendee;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -64,7 +65,8 @@ class ActionService
                 'group_id',
                 'building_id',
                 'category',
-                'qr_code'
+                'qr_code',
+                'attendee_number'
             )
             ->first();
 
@@ -73,17 +75,18 @@ class ActionService
                 ? $attendee
                 : response()->json([
                     'message' => 'Already registered.',
-                    'qr_code' => $attendee->qr_code
+                    'qr_code' => $attendee->qr_code,
+                    'attendee_number' => $attendee->attendee_number,
+                    'employee_id' => $attendee->employee_id,
+                    'category' => $attendee->category ?? null,
+                    'building' => [
+                            'name' => $attendee->building->name ?? null,
+                            'color' => [
+                                'hex' => $attendee->building?->first()?->color->hex ?? null,
+                            ],
+                        ] ?? null,
                 ])
             : response()->json([], 404);
-    }
-    public function findQR($request) {
-        $employeeID = $request->input('employee_id');
-
-        $attendee = $this->attendee->where('employee_id', $employeeID)
-            ->first()->qr_code;
-
-        return $attendee ?: response()->json([], 404);
     }
     public function attendance($request) : \Illuminate\Http\JsonResponse  {
         $attendee = $this->attendee->where('qr_code', $request->input('qr_code'))
@@ -106,10 +109,16 @@ class ActionService
             'is_present' => true
         ]);
 
-        event(new AttendeeEvent($attendee));
+//        event(new AttendeeEvent($attendee));
 
         return response()->json([
             'message' => 'Please proceed to the venue.'
         ], 200);
+    }
+    public function winner($request) : void {
+        $this->attendee->where('id', $request->attendee_id)
+            ->first()
+            ->attendance()
+            ->delete();
     }
 }

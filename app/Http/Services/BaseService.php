@@ -58,6 +58,7 @@ class BaseService implements BaseInterface
         if ($this->model instanceof Attendee) {
             if ($context->qr_code == null) {
                 $data['qr_code'] = strtoupper(self::quickRandom(7, Attendee::class, 'qr_code'));
+                $data['attendee_number'] = $this->model->max('attendee_number') + 1;
             }
         }
 

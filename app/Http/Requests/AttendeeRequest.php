@@ -29,9 +29,10 @@ class AttendeeRequest extends FormRequest
         return [
             'group_id' => ['nullable', 'exists:groups,id', new GroupLimit($this->group_id)],
             'first_name' => ['required'],
+            'middle_name' => ['nullable'],
             'last_name' => ['required'],
             'suffix' => ['nullable'],
-            'contact' => ['required'],
+            'contact' => ['nullable'],
             'company' => ['required_if:group_id,1'],
             'employee_id' => [
                 'required_if:group_id,1',
@@ -41,6 +42,7 @@ class AttendeeRequest extends FormRequest
             'position' => ['required_if:group_id,1'],
             'department' => ['required_if:group_id,1'],
             'unit' => ['required_if:group_id,1'],
+            'subunit' => ['nullable'],
             'category' => ['nullable'],
             'building_id' => ['nullable'],
             'is_attending' => ['nullable', 'boolean'],

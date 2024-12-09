@@ -30,24 +30,6 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
         $this->building = Building::select('id', 'name')->get();
     }
 
-//    public function model(array $row)
-//    {
-//        return new Attendee([
-//            'group_id' => $this->group->where('name', $row['group'])->first()->id,
-//            'first_name' => $row['firstname'],
-//            'last_name' => $row['lastname'],
-//            'suffix' => $row['suffix'],
-//            'contact' => $row['contact'],
-//            'company' => $row['company'],
-//            'employee_id' => $row['employeeid'],
-//            'position' => $row['position'],
-//            'department' => $row['department'],
-//            'unit' => $row['unit'],
-//            'category' => $row['category'],
-//            'building_id' => $this->building->where('name', $row['building'])->first()->id,
-//        ]);
-//    }
-
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
@@ -57,18 +39,24 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
         $rows->chunk(300)->each(function ($rows) {
             Attendee::insert($rows->map(function ($row) {
                 return [
-                    'group_id' => $this->group->where('name', $row['group'])->first()->id,
+                    'group_id' => $this->group->where('name', $row['team'])->first()->id,
+                    'employee_id' => $row['idnumber'],
                     'first_name' => $row['firstname'],
                     'last_name' => $row['lastname'],
+                    'middle_name' => $row['middlename'],
                     'suffix' => $row['suffix'],
-                    'contact' => $row['contact'],
-                    'company' => $row['company'],
-                    'employee_id' => $row['employeeid'],
-                    'position' => $row['position'],
                     'department' => $row['department'],
                     'unit' => $row['unit'],
+//                    'subunit' => $row['subunit'],
+                    'building_id' => $this->building->where('name', $row['building'])->first()->id ?? null,
                     'category' => $row['category'],
-                    'building_id' => $this->building->where('name', $row['building'])->first()->id,
+
+
+//                    'contact' => $row['contact'],
+//                    'company' => $row['company'],
+
+//                    'position' => $row['position'],
+
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -79,8 +67,8 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
     public function rules(): array
     {
         return [
-            '*.employeeid' => ['required', 'string', 'distinct', 'unique:attendees,employee_id'],
-            '*.group' => ['required', 'string', 'exists:groups,name'],
+            '*.idnumber' => ['required', 'string', 'distinct', 'unique:attendees,employee_id'],
+            '*.team' => ['required', 'string', 'exists:groups,name'],
             '*.building' => ['nullable', 'string', 'exists:buildings,name'],
         ];
     }
@@ -88,8 +76,11 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
     public function customValidationMessages(): array
     {
         return [
-            '*.employeeid.unique' => ':input already exists.',
-            '*.group.exists' => ':input does not exist.',
+            '*.idnumber.unique' => ':input already exists.',
+            '*.idnumber.distinct' => 'ID Number :input has a duplicate.',
+            '*.idnumber.required' => 'ID Number is required.',
+            '*.team.exists' => ':input does not exist.',
+            '*.team.required' => 'Team field is required.',
             '*.building.exists' => ':input does not exist',
         ];
     }

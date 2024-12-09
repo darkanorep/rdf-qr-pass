@@ -51,9 +51,6 @@ class AttendeeController extends Controller
     public function preRegisterChecker(Request $request) {
         return $this->actionService->preRegisterChecker($request);
     }
-    public function findQR(Request $request) {
-        return $this->actionService->findQR($request);
-    }
     public function import(Request $request) : JsonResponse {
         $file = $request->file('file');
         Excel::import(new AttendeesImport, $file);
@@ -66,5 +63,12 @@ class AttendeeController extends Controller
     public function attendeesList(): Collection
     {
         return $this->attendee->attendeesAttendance()->get();
+    }
+    public function winner(Request $request) : void {
+        $this->actionService->winner($request);
+    }
+    public function getWinners() : Collection
+    {
+        return $this->attendee->getWinners();
     }
 }

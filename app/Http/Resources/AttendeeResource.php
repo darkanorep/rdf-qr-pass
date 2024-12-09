@@ -19,6 +19,7 @@ class AttendeeResource extends JsonResource
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
+            'middle_name' => $this->middle_name,
             'last_name' => $this->last_name,
             'contact' => $this->contact,
             'company' => $this->company,
@@ -26,11 +27,12 @@ class AttendeeResource extends JsonResource
             'position' => $this->position,
             'department' => $this->department,
             'unit' => $this->unit,
+            'subunit' => $this->subunit,
             'group' => $this->group->name ?? null,
             'category' => $this->category,
             'building' => $this->building ? [
-                'id' => $this->building->id,
-                'name' => $this->building->name,
+                'id' => $this->building->id ?? null,
+                'name' => $this->building->name ?? null,
                 'color' => $this->building->color ?? null
             ] : null,
             'qr_code' => $this->qr_code

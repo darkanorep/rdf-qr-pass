@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\AttendeeFilters;
 use Essa\APIToolKit\Filters\Filterable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -22,6 +23,7 @@ class Attendee extends Model
     protected $fillable = [
         'group_id',
         'first_name',
+        'middle_name',
         'last_name',
         'suffix',
         'contact',
@@ -30,9 +32,11 @@ class Attendee extends Model
         'position',
         'department',
         'unit',
+        'subunit',
         'category',
         'building_id',
-        'qr_code'
+        'qr_code',
+        'attendee_number',
     ];
 
     protected $hidden = [
@@ -73,4 +77,8 @@ class Attendee extends Model
 //    public function supplier_guests(): HasManyThrough {
 //        return $this->hasManyThrough(SupplierGuest::class, AttendeeResponses::class, 'attendee_id', 'attendee_response_id', 'id', 'id');
 //    }
+
+    public function getWinners() : Collection{
+        return $this->whereHas('attendance', fn ($query) => $query->onlyTrashed())->get();
+    }
 }

@@ -14,28 +14,23 @@ class LimitController extends Controller
         $this->baseService = new BaseService($limit, $response);
         $this->limit = $limit;
     }
-
-    public function index(Request $request)
+    public function index(Request $request) : \Illuminate\Http\JsonResponse
     {
         $relation = [
             'group'
         ];
         return $this->baseService->index($request, 'Limits', $relation);
     }
-
     public function store(LimitRequest $request)
     {
         return $this->baseService->store($request->validated(), 'Limit');
     }
-
     public function show($limit) {
         return $this->baseService->show($limit, 'Limit');
     }
-
     public function update(LimitRequest $request, $limit) {
         return $this->baseService->update($request->validated(), $limit, 'Limit');
     }
-
     public function changeStatus($limit) {
         return $this->baseService->changeStatus($limit, 'Limit');
     }
