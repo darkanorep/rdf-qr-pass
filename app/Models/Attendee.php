@@ -78,7 +78,7 @@ class Attendee extends Model
 //        return $this->hasManyThrough(SupplierGuest::class, AttendeeResponses::class, 'attendee_id', 'attendee_response_id', 'id', 'id');
 //    }
 
-    public function getWinners() : Collection{
+    public function scopeWinners() : Collection{
         return $this->whereHas('attendance', fn ($query) => $query->onlyTrashed())->get();
     }
 }
