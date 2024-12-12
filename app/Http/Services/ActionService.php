@@ -48,7 +48,8 @@ class ActionService
         $attendee = $this->attendee->where('employee_id', $employeeID)
             ->with([
                 'group:id,name',
-                'building:id,name'
+                'building:id,name,color_id',
+                'building.color:id,name,hex'
             ])
             ->select(
                 'id',
@@ -84,8 +85,8 @@ class ActionService
                         'id' => $attendee->building->id ?? null,
                         'name' => $attendee->building->name ?? null,
                         'color' => [
-                            'name' => $attendee->building->first()->color->name ?? null,
-                            'hex' => $attendee->building->first()->color->hex ?? null,
+                            'name' => $attendee->building->color->name ?? null,
+                            'hex' => $attendee->building->color->hex ?? null,
                         ],
                     ] : null,
                     'middle_name' => $attendee->middle_name,

@@ -33,7 +33,10 @@ class AttendeeResource extends JsonResource
             'building' => $this->building ? [
                 'id' => $this->building->id ?? null,
                 'name' => $this->building->name ?? null,
-                'color' => $this->building->color ?? null
+                'color' => [
+                    'name' => $this->building->color->name ?? null,
+                    'hex' => $this->building->color->hex ?? null,
+                ],
             ] : null,
             'qr_code' => $this->qr_code,
             'attendee_number' => $this->attendee_number,
