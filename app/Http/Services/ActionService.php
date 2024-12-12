@@ -54,6 +54,7 @@ class ActionService
                 'id',
                 'employee_id',
                 'first_name',
+                'middle_name',
                 'last_name',
                 'suffix',
                 'contact',
@@ -79,12 +80,16 @@ class ActionService
                     'attendee_number' => $attendee->attendee_number,
                     'employee_id' => $attendee->employee_id,
                     'category' => $attendee->category ?? null,
-                    'building' => [
-                            'name' => $attendee->building->name ?? null,
-                            'color' => [
-                                'hex' => $attendee->building?->first()?->color->hex ?? null,
-                            ],
-                        ] ?? null,
+                    'building' => $attendee->building ? [
+                        'id' => $attendee->building->id ?? null,
+                        'name' => $attendee->building->name ?? null,
+                        'color' => [
+                            'name' => $attendee->building->first()->color->name ?? null,
+                            'hex' => $attendee->building->first()->color->hex ?? null,
+                        ],
+                    ] : null,
+                    'middle_name' => $attendee->middle_name,
+                    'last_name' => $attendee->last_name
                 ])
             : response()->json([], 404);
     }

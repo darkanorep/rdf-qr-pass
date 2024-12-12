@@ -72,6 +72,6 @@ class AttendeeController extends Controller
         return $this->attendee->winners();
     }
     public function resetWinners() : void {
-        $this->getWinners()->each(fn($attendee) => $attendee->attendance()->restore());
+        $this->attendee->winners()->each(fn($attendee) => $attendee->attendance()->restore());
     }
 }

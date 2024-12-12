@@ -35,7 +35,8 @@ class AttendeeResource extends JsonResource
                 'name' => $this->building->name ?? null,
                 'color' => $this->building->color ?? null
             ] : null,
-            'qr_code' => $this->qr_code
+            'qr_code' => $this->qr_code,
+            'attendee_number' => $this->attendee_number,
         ];
     }
 }
