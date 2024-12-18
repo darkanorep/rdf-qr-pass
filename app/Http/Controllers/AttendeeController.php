@@ -64,6 +64,12 @@ class AttendeeController extends Controller
     {
         return $this->attendee->attendeesAttendance()->get();
     }
+
+    public function attendeesListReport() : Collection
+    {
+       return $this->attendee->attendeesAttendanceReport()->get();
+    }
+
     public function winner(Request $request) : void {
         $this->actionService->winner($request);
     }

@@ -36,7 +36,6 @@ Route::post('register', [AttendeeController::class, 'store']);
 Route::get('dropdown-groups', [GroupController::class, 'index']);
 Route::get('dropdown-buildings', [BuildingController::class, 'index']);
 Route::get('pre-register-checker', [AttendeeController::class, 'preRegisterChecker']);
-Route::get('find-qr', [AttendeeController::class, 'findQR']);
 Route::post('scan-qr', [AttendeeController::class, 'attendance']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -46,6 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['middleware' => 'admin'], function () {
         Route::prefix('attendees')->group(function () {
             Route::get('/attendance-list', [AttendeeController::class, 'attendeesList']);
+            Route::get('/attendance-list-report', [AttendeeController::class, 'attendeesListReport']);
             Route::put('/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
             Route::post('/import', [AttendeeController::class, 'import']);
             Route::post('/winner', [AttendeeController::class, 'winner']);

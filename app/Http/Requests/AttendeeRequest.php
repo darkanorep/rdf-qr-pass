@@ -27,7 +27,8 @@ class AttendeeRequest extends FormRequest
     {
 
         return [
-            'group_id' => ['nullable', 'exists:groups,id', new GroupLimit($this->group_id)],
+//            'group_id' => ['nullable', 'exists:groups,id', new GroupLimit($this->group_id)],
+            'group_id' => ['nullable', 'exists:groups,id'],
             'first_name' => ['required'],
             'middle_name' => ['nullable'],
             'last_name' => ['required'],

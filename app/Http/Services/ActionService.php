@@ -112,19 +112,22 @@ class ActionService
         }
 
         $attendee->attendance()->create([
-            'is_present' => true
+            'is_present' => true,
+            'created_at' => Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s')
         ]);
 
 //        event(new AttendeeEvent($attendee));
 
         return response()->json([
-            'message' => 'Please proceed to the venue.'
+            'message' => 'Please proceed to the venue.',
+            'attendee' => $attendee->makeHidden('attendance')
         ], 200);
     }
     public function winner($request) : void {
-        $this->attendee->where('id', $request->attendee_id)
-            ->first()
-            ->attendance()
-            ->delete();
+        $attendee = $this->attendee->where('id', $request->attendee_id)
+            ->withTrashed()
+            ->first();
+        $attendee->winner()->create();
+        $attendee->attendance()->delete();
     }
 }
