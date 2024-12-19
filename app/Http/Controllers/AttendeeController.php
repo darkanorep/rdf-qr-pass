@@ -12,6 +12,7 @@ use App\Models\Attendee;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AttendeeController extends Controller
@@ -57,6 +58,9 @@ class AttendeeController extends Controller
 
         return $this->response->ok('Attendees imported successfully');
     }
+    public function export() : Collection {
+        return $this->attendee->attendeesAttendanceReport()->get();
+    }
     public function attendance(Request $request) : JsonResponse{
         return $this->actionService->attendance($request);
     }
@@ -64,12 +68,10 @@ class AttendeeController extends Controller
     {
         return $this->attendee->attendeesAttendance()->get();
     }
-
-    public function attendeesListReport() : Collection
+    public function attendeesListReport() : LengthAwarePaginator
     {
-       return $this->attendee->attendeesAttendanceReport()->get();
+       return $this->attendee->attendeesAttendanceReport()->paginate(request()->input('per_page', 20));
     }
-
     public function winner(Request $request) : void {
         $this->actionService->winner($request);
     }

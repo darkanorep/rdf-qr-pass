@@ -96,6 +96,7 @@ class ActionService
     }
     public function attendance($request) : \Illuminate\Http\JsonResponse  {
         $attendee = $this->attendee->where('qr_code', $request->input('qr_code'))
+            ->whereNotNull('qr_code')
             ->with('attendance')
             ->first();
 

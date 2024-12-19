@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('/attendance-list-report', [AttendeeController::class, 'attendeesListReport']);
             Route::put('/change-status/{attendee}', [AttendeeController::class, 'changeStatus']);
             Route::post('/import', [AttendeeController::class, 'import']);
+            Route::get('/attendance-list-report/export', [AttendeeController::class, 'export']);
             Route::post('/winner', [AttendeeController::class, 'winner']);
             Route::get('/winners', [AttendeeController::class, 'getWinners']);
             Route::post('/winners/reset', [AttendeeController::class, 'resetWinners']);

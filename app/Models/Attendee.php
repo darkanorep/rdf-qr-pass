@@ -93,14 +93,14 @@ class Attendee extends Model
             ->with([
                 'attendance' => fn ($query) => $query->withTrashed()->select('attendee_id', 'created_at as attendance_date')
             ])
-            ->select('id', 'employee_id', 'first_name', 'last_name', 'suffix', 'attendee_number')
+            ->select('id', 'employee_id', 'first_name', 'last_name', 'suffix', 'attendee_number', 'department')
             ->orderBy(function ($query) {
                 $query->select('created_at')
                     ->from('attendance')
                     ->whereColumn('attendee_id', 'attendees.id')
                     ->latest()
                     ->limit(1);
-            }, 'desc');
+            }, 'asc');
     }
 
 
