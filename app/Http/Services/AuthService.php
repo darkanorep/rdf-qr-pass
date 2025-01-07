@@ -14,7 +14,7 @@ class AuthService
 
     public function login($request) {
         if (Auth::attempt($request->only('username', 'password'))) {
-            $user = Auth::user();
+            $user = Auth::user()->load('permissions');
             $token = $user->createToken('token')->plainTextToken;
             $user["token"] = $token;
             $cookie = cookie('sanctum', $token, 3600);

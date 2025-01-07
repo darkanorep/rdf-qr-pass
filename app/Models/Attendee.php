@@ -91,7 +91,7 @@ class Attendee extends Model
                 $query->withTrashed();
             })
             ->with([
-                'attendance' => fn ($query) => $query->withTrashed()->select('attendee_id', 'created_at as attendance_date')
+                'attendance' => fn ($query) => $query->withTrashed()->select('id', 'attendee_id', 'created_at as attendance_date')
             ])
             ->select('id', 'employee_id', 'first_name', 'last_name', 'suffix', 'attendee_number', 'department')
             ->orderBy(function ($query) {

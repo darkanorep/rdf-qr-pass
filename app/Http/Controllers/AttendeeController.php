@@ -8,6 +8,7 @@ use App\Http\Services\ActionService;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
 use App\Imports\AttendeesImport;
+use App\Models\Attendance;
 use App\Models\Attendee;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -82,4 +83,7 @@ class AttendeeController extends Controller
     public function resetWinners() : void {
         $this->attendee->winners()->each(fn($attendee) => $attendee->attendance()->restore());
     }
+//    public function attendanceFactory() : void  {
+//        Attendance::factory()->present()->count(1000)->create();
+//    }
 }

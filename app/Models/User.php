@@ -12,10 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Filterable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Filterable, HasJsonRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +28,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'role_id',
+        'permission_id',
         'company',
         'employee_id',
         'first_name',
@@ -43,6 +46,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
+        'permission_id',
         'password',
         'remember_token',
         'created_at'
@@ -56,6 +60,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'permission_id' => 'json'
     ];
 
     public function role() : BelongsTo
@@ -66,5 +71,10 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role->name == RoleType::ADMIN || $this->role->name == RoleType::HR;
+    }
+
+    public function permissions() : BelongsToJson
+    {
+        return $this->belongsToJson(Permission::class, 'permission_id')->withTrashed()->select('id', 'name');
     }
 }

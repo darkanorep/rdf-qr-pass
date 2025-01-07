@@ -25,21 +25,21 @@ class ActionService
             'is_attending' => $data['is_attending'] ?? false
         ]);
 
-        if (GroupType::SUPPLIER == $this->attendee->group->name) {
-            $this->attendee->responses()->create([
-                'year' => Carbon::now()->year,
-                'is_additional' => $data['is_additional'] ?? false
-            ]);
-
-            if ($data['is_additional']) {
-                $this->attendee->supplier_guests()->create([
-                    'first_name' => $data['rsvp']['first_name'],
-                    'last_name' => $data['rsvp']['last_name'],
-                    'company' => $data['rsvp']['company'],
-                    'attendee_response_id' => $this->attendee->responses->first()->id
-                ]);
-            }
-        }
+//        if (GroupType::SUPPLIER == $this->attendee->group->name) {
+//            $this->attendee->responses()->create([
+//                'year' => Carbon::now()->year,
+//                'is_additional' => $data['is_additional'] ?? false
+//            ]);
+//
+//            if ($data['is_additional']) {
+//                $this->attendee->supplier_guests()->create([
+//                    'first_name' => $data['rsvp']['first_name'],
+//                    'last_name' => $data['rsvp']['last_name'],
+//                    'company' => $data['rsvp']['company'],
+//                    'attendee_response_id' => $this->attendee->responses->first()->id
+//                ]);
+//            }
+//        }
     }
     public function preRegisterChecker($request)
     {

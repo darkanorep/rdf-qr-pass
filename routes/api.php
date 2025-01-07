@@ -4,6 +4,7 @@ use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\LimitController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BuildingController;
@@ -37,6 +38,7 @@ Route::get('dropdown-groups', [GroupController::class, 'index']);
 Route::get('dropdown-buildings', [BuildingController::class, 'index']);
 Route::get('pre-register-checker', [AttendeeController::class, 'preRegisterChecker']);
 Route::post('scan-qr', [AttendeeController::class, 'attendance']);
+//Route::post('factory', [AttendeeController::class, 'attendanceFactory']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
@@ -73,5 +75,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::put('colors/change-status/{color}', [ColorController::class, 'changeStatus']);
         Route::resource('colors', ColorController::class);
+
+        Route::put('permissions/change-status/{permission}', [PermissionController::class, 'changeStatus']);
+        Route::resource('permissions', PermissionController::class);
     });
 });

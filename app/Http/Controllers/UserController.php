@@ -18,7 +18,8 @@ class UserController extends Controller
 
     public function index(Request $request): \Illuminate\Http\JsonResponse{
         $relation = [
-            'role' => fn($query) => $query->select('id', 'name')
+            'role' => fn($query) => $query->select('id', 'name'),
+            'permissions',
         ];
         return $this->baseService->index($request, 'Users', $relation);
     }

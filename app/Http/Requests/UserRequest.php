@@ -24,6 +24,7 @@ class UserRequest extends FormRequest
     {
         return [
             'role_id' => ['required', 'integer', 'exists:roles,id'],
+            'permission_id' => ['required', 'array', 'exists:permissions,id'],
             'company' => ['required', 'string'],
             'employee_id' => ['required', 'string'],
             'first_name' => ['required', 'string'],
@@ -44,6 +45,13 @@ class UserRequest extends FormRequest
         return [
             'role_id.required' => 'Role type is required.',
             'role_id.exists' => 'Invalid role type.',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            "permission_id" => "permission",
         ];
     }
 }
