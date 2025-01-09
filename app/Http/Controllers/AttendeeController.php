@@ -8,6 +8,8 @@ use App\Http\Services\ActionService;
 use App\Http\Services\BaseService;
 use App\Http\Traits\Response;
 use App\Imports\AttendeesImport;
+use App\Imports\EligibleAttendees;
+use App\Imports\NonEligibleAttendees;
 use App\Models\Attendance;
 use App\Models\Attendee;
 use Illuminate\Database\Eloquent\Collection;
@@ -67,7 +69,13 @@ class AttendeeController extends Controller
     }
     public function attendeesList(): Collection
     {
-        return $this->attendee->attendeesAttendance()->get();
+        return $this->attendee->attendeesAttendance()
+            ->when(\request()->category == 'minor', function ($query) {
+                $query->get();
+            }, function ($query) {
+                $query->where('employee_id', 'like', '%RDFFLFI%')->get();
+            })
+            ->get();
     }
     public function attendeesListReport() : LengthAwarePaginator
     {
@@ -81,7 +89,22 @@ class AttendeeController extends Controller
         return $this->attendee->winners();
     }
     public function resetWinners() : void {
-        $this->attendee->winners()->each(fn($attendee) => $attendee->attendance()->restore());
+        $this->attendee->wins()->each(fn($attendee) => $attendee->attendance()->restore());
+    }
+
+    public function importELigbles(Request $request) {
+        $file = $request->file('file');
+        Excel::import(new EligibleAttendees, $file);
+
+        return $this->response->ok('Eligible attendees imported successfully');
+    }
+
+    public function importNonEligbles(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new NonEligibleAttendees, $file);
+
+        return $this->response->ok('Non-eligible attendees imported successfully');
     }
 //    public function attendanceFactory() : void  {
 //        Attendance::factory()->present()->count(1000)->create();

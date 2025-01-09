@@ -54,6 +54,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/winner', [AttendeeController::class, 'winner']);
             Route::get('/winners', [AttendeeController::class, 'getWinners']);
             Route::post('/winners/reset', [AttendeeController::class, 'resetWinners']);
+            Route::post('/import-eligible', [AttendeeController::class, 'importELigbles']);
+            Route::post('/import-non-eligible', [AttendeeController::class, 'importNonEligbles']);
         });
 
         Route::resource('attendees', AttendeeController::class);

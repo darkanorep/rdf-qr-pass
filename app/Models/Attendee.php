@@ -70,7 +70,9 @@ class Attendee extends Model
     }
 
     public function attendeesAttendance() {
-        return $this->has('attendance')
+        return $this->whereHas('attendance', function ($query) {
+            $query->where('is_eligible', 1);
+        })
             ->with([
                 'attendance' => fn ($query) => $query->select('attendee_id', 'created_at as attendance_date')
             ])
@@ -88,7 +90,9 @@ class Attendee extends Model
     {
         return $this->newQuery()
             ->whereHas('attendance', function ($query) {
-                $query->withTrashed();
+                $query
+                    ->where('is_present', true)
+                    ->withTrashed();
             })
             ->with([
                 'attendance' => fn ($query) => $query->withTrashed()->select('id', 'attendee_id', 'created_at as attendance_date')
@@ -119,6 +123,13 @@ class Attendee extends Model
     }
 
     public function scopeWinners() : Collection {
+        return $this->whereHas('winner', function ($query) {
+            $query->where('category', request()->category);
+        })
+            ->select('id', 'employee_id', 'first_name', 'middle_name', 'last_name', 'department')->get();
+    }
+
+    public function scopeWins() : Collection {
         return $this->has('winner')->select('id', 'employee_id', 'first_name', 'middle_name', 'last_name', 'department')->get();
     }
 }

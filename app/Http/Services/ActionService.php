@@ -128,7 +128,9 @@ class ActionService
         $attendee = $this->attendee->where('id', $request->attendee_id)
             ->withTrashed()
             ->first();
-        $attendee->winner()->create();
+        $attendee->winner()->create([
+            'category' => $request->category,
+        ]);
         $attendee->attendance()->delete();
     }
 }

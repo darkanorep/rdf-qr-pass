@@ -50,18 +50,36 @@ class AttendeesImport implements WithHeadingRow, ToCollection, WithValidation
 //                    'subunit' => $row['subunit'],
                     'building_id' => $this->building->where('name', $row['building'])->first()->id ?? null,
                     'category' => $row['category'],
-
-
 //                    'contact' => $row['contact'],
 //                    'company' => $row['company'],
-
 //                    'position' => $row['position'],
-
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             })->toArray());
         });
+
+//        foreach ($rows as $row) {
+//            Attendee::updateOrCreate(
+//                [
+//                    'employee_id' => $row['idnumber'],
+//                ],
+//                [
+//                    'group_id' => $this->group->where('name', $row['team'])->first()->id,
+//                    'employee_id' => $row['idnumber'],
+//                    'first_name' => $row['firstname'],
+//                    'last_name' => $row['lastname'],
+//                    'middle_name' => $row['middlename'],
+//                    'suffix' => $row['suffix'],
+//                    'department' => $row['department'],
+//                    'unit' => $row['unit'],
+//                    'building_id' => $this->building->where('name', $row['building'])->first()->id ?? null,
+//                    'category' => $row['category'],
+//                    'created_at' => now(),
+//                    'updated_at' => now(),
+//                ]
+//            );
+//        }
     }
 
     public function rules(): array

@@ -10,6 +10,7 @@ class Winner extends Model
     use HasFactory;
 
     protected $fillable = [
-        'attendee_id'
+        'attendee_id',
+        'category',
     ];
 }

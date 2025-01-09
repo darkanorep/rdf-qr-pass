@@ -14,6 +14,7 @@ class Attendance extends Model
 
     protected $fillable = [
         'attendee_id',
-        'is_present'
+        'is_present',
+        'is_eligible',
     ];
 }
